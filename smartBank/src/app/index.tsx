@@ -1,6 +1,5 @@
 import { Text, View } from "react-native";
 import { Link } from "expo-router";
-
 export default function HomePage() {
   return (
     <View
@@ -8,11 +7,11 @@ export default function HomePage() {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "lightblue"
+        backgroundColor: "lightblue",
       }}
     >
       <Text>Hello, World!</Text>
-      <Link href={"/screens/dashboard"}>Entrar</Link>
+      <Link href={"/screens/login"}>Entrar</Link>
     </View>
   );
 }
