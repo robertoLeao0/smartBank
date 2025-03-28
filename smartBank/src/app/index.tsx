@@ -12,7 +12,7 @@ export default function HomePage() {
       }}
     >
       <Text>Hello, World!</Text>
-      <Link href={"/screens/dashboard"}>Entrar</Link>
+      <Link href={"/screens/login"}>Entrar</Link>
     </View>
   );
 }
