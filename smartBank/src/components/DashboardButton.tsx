@@ -1,10 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-
-// Tipagem para as props do DashboardButton
 interface DashboardButtonProps {
-  icon: keyof typeof FontAwesome.glyphMap;  // Isso garante que 'icon' seja um dos ícones válidos do FontAwesome
+  icon: keyof typeof FontAwesome.glyphMap;
   title: string;
 }
 

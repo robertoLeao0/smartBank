@@ -1,11 +1,22 @@
-import { Stack } from "expo-router";
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import LoginScreen from './screens/LoginScreen';
+import CreateAccountScreen from './screens/CreateAccountScreen';
+import DashboardScreen from './screens/dashboard';
+import UserProvider from '../contexts/user';
 
-export default function RootLayout() {
+const Stack = createStackNavigator();
+
+const App: React.FC = () => {
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerTitle: "Login" }} />
-      
-      <Stack.Screen name="dashboard" options={{ headerTitle: "Dashboard" }} />
-    </Stack>
+      <UserProvider> 
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
+          <Stack.Screen name="Dashboard" component={DashboardScreen} />
+        </Stack.Navigator>
+      </UserProvider>
   );
-}
+};
+
+export default App;
