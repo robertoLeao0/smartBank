@@ -12,8 +12,9 @@ const App: React.FC = () => {
       <UserProvider> 
         <Stack.Navigator initialRouteName="Login">
           <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
+          <Stack.Screen name="Sign" component={CreateAccountScreen} />
           <Stack.Screen name="Dashboard" component={DashboardScreen} />
+          <Stack.Screen name="Transferir" component={DashboardScreen} />
         </Stack.Navigator>
       </UserProvider>
   );

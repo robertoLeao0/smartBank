@@ -3,7 +3,7 @@ import { View, Text, Button, TextInput, StyleSheet, ScrollView, Alert } from 're
 import { useUser } from '../../contexts/user';
 
 const DashboardScreen: React.FC = () => {
-  const { usuarioLogado, logout, updateChavePix } = useUser(); 
+  const { usuarioLogado, logout, updateChavePix } = useUser(); // corrigir problema da atualização chave pix
   const [novaChavePix, setNovaChavePix] = useState('');
 
   const handleLogout = () => {
