@@ -16,7 +16,7 @@ const CreateAccountScreen: React.FC = ({ navigation }: any) => {
       return;
     }
 
-    const contaCriada = criarConta(nome, cpf, senha, 'Não cadastrada');
+    const contaCriada = criarConta(nome, cpf, senha);
     if (contaCriada) {
       Alert.alert('Conta criada com sucesso', 'Agora você pode fazer login!');
       navigation.navigate('Login');

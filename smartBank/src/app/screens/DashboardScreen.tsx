@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Button, TextInput, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useUser } from '../../contexts/user';
 
-const DashboardScreen: React.FC = () => {
+const DashboardScreen: React.FC = ({ navigation }: any) => {
   const { usuarioLogado, logout, updateChavePix } = useUser(); // corrigir problema da atualização chave pix
   const [novaChavePix, setNovaChavePix] = useState('');
 
@@ -10,6 +10,10 @@ const DashboardScreen: React.FC = () => {
     logout(); 
     alert('Você foi desconectado.');
   };
+
+  const handTransfer = () => {
+        navigation.navigate('Transferir');
+    };
 
   const handleSaveChavePix = () => {
     if (novaChavePix === '') {
@@ -58,7 +62,10 @@ const DashboardScreen: React.FC = () => {
         <Text style={styles.cardInfo}>Data de Expiração: {usuarioLogado.dataExpiracaoCartao}</Text>
       </View>
 
+      <Button title="Transferir" onPress={handTransfer} color="green" />
+
       <Button title="Sair" onPress={handleLogout} color="#e74c3c" />
+
     </ScrollView>
   );
 };

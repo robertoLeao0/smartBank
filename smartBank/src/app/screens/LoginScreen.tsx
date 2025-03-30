@@ -43,7 +43,7 @@ const LoginScreen: React.FC = ({ navigation }: any) => {
 
       <Button
         title="Criar Conta"
-        onPress={() => navigation.navigate('CreateAccount')}
+        onPress={() => navigation.navigate('Sign')}
         color="#3498db"
       />
     </View>

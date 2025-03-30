@@ -18,6 +18,7 @@ type UserContextData = {
   login: (cpf: string, senha: string) => UserData | null;
   logout: () => void;
   usuarioLogado: UserData | null;
+  updateChavePix: (novaChave: string) => void; // Adicionado método updateChavePix
 };
 
 // Tipagem do provider
@@ -31,6 +32,7 @@ export const UserContext = createContext<UserContextData>({
   login: () => null,
   logout: () => {},
   usuarioLogado: null,
+  updateChavePix: () => {}, // Inicializando função vazia
 });
 
 const gerarNumeroCartao = (): string => {
@@ -43,7 +45,7 @@ const gerarNumeroCartao = (): string => {
 
 const gerarDataExpiracao = (): string => {
   const mes = Math.floor(Math.random() * 12) + 1;
-  const ano = Math.floor(Math.random() * 5) + 25; 
+  const ano = Math.floor(Math.random() * 5) + 25;
   return `${mes < 10 ? `0${mes}` : mes}/${ano}`;
 };
 
@@ -56,12 +58,12 @@ function UserProvider({ children }: UserProviderProps) {
   const [usuarioLogado, setUsuarioLogado] = useState<UserData | null>(null);
 
   const criarConta = (nome: string, cpf: string, senha: string): boolean => {
-    const chavePix = `pix-${Math.floor(Math.random() * 100000000)}`; // Geração da chave Pix
-    const numeroCartao = gerarNumeroCartao(); // Geração do número do cartão
-    const dataExpiracaoCartao = gerarDataExpiracao(); // Geração da data de expiração do cartão
+    const chavePix = `pix-${Math.floor(Math.random() * 100000000)}`;
+    const numeroCartao = gerarNumeroCartao();
+    const dataExpiracaoCartao = gerarDataExpiracao();
 
     if (verificarUsuarioExistente(usuarios, cpf)) {
-      return false; // Já existe um usuário com esse CPF
+      return false;
     }
 
     const novoUsuario: UserData = {
@@ -71,28 +73,40 @@ function UserProvider({ children }: UserProviderProps) {
       chavePix,
       numeroCartao,
       dataExpiracaoCartao,
-      saldo: 0, // Inicializando o saldo como 0
+      saldo: 0,
     };
 
     setUsuarios([...usuarios, novoUsuario]);
-    return true; // Conta criada com sucesso
+    return true;
   };
 
   const login = (cpf: string, senha: string): UserData | null => {
     const usuario = usuarios.find(u => u.cpf === cpf && u.senha === senha);
     if (usuario) {
       setUsuarioLogado(usuario);
-      return usuario; // Login bem-sucedido
+      return usuario;
     }
-    return null; // Dados inválidos
+    return null;
   };
 
   const logout = () => {
-    setUsuarioLogado(null); // Limpa o usuário logado
+    setUsuarioLogado(null);
+  };
+
+  const updateChavePix = (novaChave: string) => {
+    if (usuarioLogado) {
+      const usuarioAtualizado = { ...usuarioLogado, chavePix: novaChave };
+      setUsuarioLogado(usuarioAtualizado);
+
+      // Atualiza lista de usuários
+      setUsuarios(prevUsuarios =>
+        prevUsuarios.map(user => (user.cpf === usuarioLogado.cpf ? usuarioAtualizado : user))
+      );
+    }
   };
 
   return (
-    <UserContext.Provider value={{ usuarios, criarConta, login, logout, usuarioLogado }}>
+    <UserContext.Provider value={{ usuarios, criarConta, login, logout, usuarioLogado, updateChavePix }}>
       {children}
     </UserContext.Provider>
   );
