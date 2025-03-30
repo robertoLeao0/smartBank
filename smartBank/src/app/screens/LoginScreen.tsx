@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, Alert, StyleSheet } from 'react-native';
+import { View, TextInput, TouchableOpacity, Image, Text, Alert, StyleSheet } from 'react-native';
 import { useUser } from '../../contexts/user'; 
 
 const LoginScreen: React.FC = ({ navigation }: any) => {
   const [cpf, setCpf] = useState('');
   const [senha, setSenha] = useState('');
   const { login } = useUser();
-
 
   const handleLogin = () => {
     const usuario = login(cpf, senha);
@@ -17,10 +16,11 @@ const LoginScreen: React.FC = ({ navigation }: any) => {
     }
   };
 
-  return (
+    return (
     <View style={styles.container}>
-      <Text style={styles.title}>Digite seu CPF e Senha</Text>
-
+      <Image source={require('../../assets/logo.png')} style={styles.imgLogo} />
+      
+      <Text style={styles.title}>Bem-vindo ao SmartBank!</Text>
 
       <TextInput
         placeholder="Digite seu CPF"
@@ -30,7 +30,6 @@ const LoginScreen: React.FC = ({ navigation }: any) => {
         style={styles.input}
       />
 
-
       <TextInput
         placeholder="Digite sua Senha"
         value={senha}
@@ -39,13 +38,16 @@ const LoginScreen: React.FC = ({ navigation }: any) => {
         style={styles.input}
       />
 
-      <Button title="Entrar" onPress={handleLogin} color="#2ecc71" />
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.loginButtonText}>Entrar na minha conta</Text>
+      </TouchableOpacity>
 
-      <Button
-        title="Criar Conta"
-        onPress={() => navigation.navigate('Sign')}
-        color="#3498db"
-      />
+      <Text style={styles.registerText}>Não tem conta?
+      <TouchableOpacity onPress={() => navigation.navigate('Sign')}>
+         <Text style={[styles.registerText, styles.registerLink]}>Registre-se</Text>
+      </TouchableOpacity>
+      </Text>
+
     </View>
   );
 };
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
   },
   title: {
-    fontSize: 20,
+    fontSize: 40,
     color: '#2c3e50',
     marginBottom: 20,
   },
@@ -71,6 +73,31 @@ const styles = StyleSheet.create({
     borderColor: '#bdc3c7',
     borderRadius: 5,
     backgroundColor: '#fff',
+  },
+  loginButton: {
+    backgroundColor: '#004080',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loginButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  registerText: {
+    color: 'gray',
+    fontSize: 16,
+  },
+  registerLink: {
+    textDecorationLine: 'underline'
+  },
+  imgLogo: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain'
   },
 });
 

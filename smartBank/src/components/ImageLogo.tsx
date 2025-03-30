@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet } from 'react-native';
 
 const WelcomeText = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bem-vindo ao SmartBank!</Text>
+      <Image source={require('../assets/logo.png')} style={styles.imgLogo} />
     </View>
   );
 };
@@ -13,10 +13,10 @@ const styles = StyleSheet.create({
   container: {
     paddingLeft: 20,
   },
-  title: {
-    fontSize: 40,
-    color: '#2c3e50',
-    marginBottom: 20,
+  imgLogo: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain'
   },
 });
 
