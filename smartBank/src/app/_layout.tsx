@@ -4,6 +4,7 @@ import LoginScreen from './screens/LoginScreen';
 import CreateAccountScreen from './screens/CreateAccountScreen';
 import DashboardScreen from './screens/dashboard';
 import UserProvider from '../contexts/user';
+import Transfer from './screens/Transfer';
 
 const Stack = createStackNavigator();
 
@@ -14,7 +15,7 @@ const App: React.FC = () => {
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Sign" component={CreateAccountScreen} />
           <Stack.Screen name="Dashboard" component={DashboardScreen} />
-          <Stack.Screen name="Transferir" component={DashboardScreen} />
+          <Stack.Screen name="Transferir" component={Transfer} />
         </Stack.Navigator>
       </UserProvider>
   );
