@@ -62,7 +62,7 @@ const DashboardScreen: React.FC = ({ navigation }: any) => {
         <Text style={styles.cardInfo}>Data de Expiração: {usuarioLogado.dataExpiracaoCartao}</Text>
       </View>
 
-      <Button title="Transferir" onPress={handTransfer} color="green" />
+      <Button title="Transferir" onPress={handTransfer} color="blue" />
 
       <Button title="Sair" onPress={handleLogout} color="#e74c3c" />
 
