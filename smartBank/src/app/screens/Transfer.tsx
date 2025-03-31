@@ -1,18 +1,43 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 
-const Transfer: React.FC = () => {
+const Transfer: React.FC = ({ navigation }: any) => {
   const [valor, setValor] = useState<string>('R$ 0,00');
+  const [erro, setErro] = useState<string>(''); // Estado para armazenar a mensagem de erro
 
+  // Função para formatar a moeda
   const formatarMoeda = (inputValue: string): string => {
-    let valorNumerico = inputValue.replace(/\D/g, '');
+    let valorNumerico = inputValue.replace(/\D/g, ''); // Remove qualquer coisa que não seja número
     if (valorNumerico.length === 0) return 'R$ 0,00';
-    let numero = (parseInt(valorNumerico, 10) / 100).toFixed(2);
-    return `R$ ${numero.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+    let numero = (parseInt(valorNumerico, 10) / 100).toFixed(2); // Converte para valor monetário
+    return `R$ ${numero.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`; // Formata a moeda
   };
 
+  // Função para lidar com a alteração do valor
   const handleChange = (text: string): void => {
     setValor(formatarMoeda(text));
+    setErro(''); // Limpar mensagem de erro ao alterar o valor
+  };
+
+  // Função para verificar se o valor é válido (igual ou maior que 0,01)
+  const validarValor = (valor: string): boolean => {
+    let valorNumerico = valor.replace(/\D/g, ''); // Remove caracteres não numéricos
+    const valorConvertido = parseInt(valorNumerico, 10) / 100; // Converte para valor numérico
+    return valorConvertido >= 0.01; // Verifica se é maior ou igual a 0,01
+  };
+
+  // Função que lida com a navegação para a tela de chave (Key)
+  const handKey = () => {
+    if (validarValor(valor)) {
+      navigation.navigate('Key', { valorTransferencia: valor });
+    } else {
+      setErro('Valor inválido.'); // Exibe a mensagem de erro
+    }
+  };
+
+  // Função para voltar para a tela Dashboard
+  const Dashboard = () => {
+    navigation.navigate('Dashboard');
   };
 
   return (
@@ -25,8 +50,12 @@ const Transfer: React.FC = () => {
         onChangeText={handleChange}
         keyboardType="numeric"
       />
-      <TouchableOpacity style={styles.button} onPress={() => console.log('Transferência iniciada')}>
+      {erro ? <Text style={styles.erroText}>{erro}</Text> : null} {/* Exibe a mensagem de erro se houver */}
+      <TouchableOpacity style={styles.button} onPress={handKey}>
         <Text style={styles.buttonText}>Continuar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={Dashboard}>
+        <Text style={styles.buttonText}>Voltar</Text>
       </TouchableOpacity>
     </View>
   );
@@ -59,13 +88,19 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: '#000000',
     width: '50%',
-    marginBottom: 30,
+    marginBottom: 10,
+  },
+  erroText: {
+    color: 'red', // Cor vermelha para a mensagem de erro
+    fontSize: 14,
+    marginBottom: 20,
   },
   button: {
     backgroundColor: '#0000FF',
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 25,
+    marginBottom: 15,
   },
   buttonText: {
     color: '#FFF',

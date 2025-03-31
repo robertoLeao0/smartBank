@@ -14,7 +14,12 @@ const DashboardScreen: React.FC = ({ navigation }: any) => {
   const handTransfer = () => {
         navigation.navigate('Transferir');
     };
-
+  const handKey = () => {
+      navigation.navigate('Key');
+  };
+  const Dashboard = () => {
+    navigation.navigate('Dashboard');
+};
   const handleSaveChavePix = () => {
     if (novaChavePix === '') {
       Alert.alert('Erro', 'A chave Pix não pode ser vazia!');

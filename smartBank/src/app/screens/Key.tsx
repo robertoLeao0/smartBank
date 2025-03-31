@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-
-const Pay: React.FC = () => {
+import { useRoute } from '@react-navigation/native';
+const Key: React.FC = ({ navigation }: any) => {
   const [chavePix, setChavePix] = useState<string>('');
+  const route = useRoute();
+  const { valorTransferencia } = route.params;
 
   const validarCPF = (cpf: string): boolean => {
     cpf = cpf.replace(/\D/g, '');
@@ -39,10 +41,13 @@ const Pay: React.FC = () => {
       Alert.alert('Erro', 'Digite um CPF ou e-mail válido.');
     }
   };
+  const handTransfer = () => {
+    navigation.navigate('Transferir');
+};
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Para quem você quer transferir R$ 100,00?</Text>
+      <Text style={styles.title}>Para quem você quer transferir {valorTransferencia}?</Text>
       <Text style={styles.textochave}>Digite a chave PIX abaixo:</Text>
       <TextInput
         style={styles.input}
@@ -54,6 +59,9 @@ const Pay: React.FC = () => {
       />
       <TouchableOpacity style={styles.button} onPress={handleContinue}>
         <Text style={styles.buttonText}>Continuar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handTransfer}>
+        <Text style={styles.buttonText}>Cancelar</Text>
       </TouchableOpacity>
     </View>
   );
@@ -85,7 +93,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderBottomWidth: 2,
     borderBottomColor: '#000000',
-    width: '80%',
+    width: '50%',
     marginBottom: 30,
     padding: 10,
   },
@@ -94,6 +102,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 25,
+    marginBottom: 15,
   },
   buttonText: {
     color: '#FFF',
@@ -102,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Pay;
+export default Key;
