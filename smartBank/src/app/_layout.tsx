@@ -5,7 +5,7 @@ import CreateAccountScreen from './screens/CreateAccountScreen';
 import Dashboard from './screens/DashboardScreen';
 import UserProvider from '../contexts/user';
 import Transfer from './screens/Transfer';
-
+import Key from './screens/Key'
 const Stack = createStackNavigator();
 
 const App: React.FC = () => {
@@ -16,6 +16,7 @@ const App: React.FC = () => {
           <Stack.Screen name="Sign" component={CreateAccountScreen} />
           <Stack.Screen name="Dashboard" component={Dashboard} />
           <Stack.Screen name="Transferir" component={Transfer} />
+          <Stack.Screen name="Key" component={Key} />
         </Stack.Navigator>
       </UserProvider>
   );
