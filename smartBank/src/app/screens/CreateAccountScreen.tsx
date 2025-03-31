@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, Text, Alert, StyleSheet } from 'react-native';
-import { useUser } from '../../contexts/user'; 
+import * as LocalAuthentication from 'expo-local-authentication'; 
+import { useUser } from '../../contexts/user';
 
 const CreateAccountScreen: React.FC = ({ navigation }: any) => {
   const [nome, setNome] = useState('');
@@ -9,6 +10,29 @@ const CreateAccountScreen: React.FC = ({ navigation }: any) => {
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const { criarConta } = useUser();
 
+  // Função para verificar a autenticação biométrica
+  const handleFaceIDAuthentication = async () => {
+    try {
+      const isBiometricSupported = await LocalAuthentication.hasHardwareAsync();
+      if (isBiometricSupported) {
+        const result = await LocalAuthentication.authenticateAsync({
+          promptMessage: 'Autentique-se para criar sua conta!',
+          fallbackLabel: 'Usar senha',
+        });
+
+        if (result.success) {
+          Alert.alert('Autenticação biométrica', 'Você autenticou com sucesso!');
+        } else {
+          Alert.alert('Erro', 'Falha na autenticação biométrica.');
+        }
+      } else {
+        Alert.alert('Erro', 'Seu dispositivo não suporta autenticação biométrica.');
+      }
+    } catch (error) {
+      console.error('Erro ao tentar autenticar com a biometria:', error);
+      Alert.alert('Erro', 'Houve um erro ao tentar autenticar com a biometria.');
+    }
+  };
 
   const handleCreateAccount = () => {
     if (senha !== confirmarSenha) {
@@ -25,11 +49,15 @@ const CreateAccountScreen: React.FC = ({ navigation }: any) => {
     }
   };
 
+  useEffect(() => {
+    // Tenta autenticar com a biometria assim que a tela é carregada
+    handleFaceIDAuthentication();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Criação de Conta</Text>
 
-   
       <TextInput
         placeholder="Digite seu Nome Completo"
         value={nome}
@@ -37,7 +65,6 @@ const CreateAccountScreen: React.FC = ({ navigation }: any) => {
         style={styles.input}
       />
 
-     
       <TextInput
         placeholder="Digite seu CPF (Ex: 111.222.333-44)"
         value={cpf}
@@ -46,7 +73,6 @@ const CreateAccountScreen: React.FC = ({ navigation }: any) => {
         style={styles.input}
       />
 
-      
       <TextInput
         placeholder="Digite sua Senha"
         value={senha}
@@ -55,7 +81,6 @@ const CreateAccountScreen: React.FC = ({ navigation }: any) => {
         style={styles.input}
       />
 
-   
       <TextInput
         placeholder="Confirmar Senha"
         value={confirmarSenha}

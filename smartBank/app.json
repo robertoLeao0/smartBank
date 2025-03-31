@@ -8,7 +8,12 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "Precisamos do Face ID para autenticação.",
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "bundleIdentifier": "com.alfds10.smartBank"
     },
     "android": {
       "adaptiveIcon": {
@@ -34,6 +39,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "987c5e51-c5ae-4a33-92a8-5d4761269cdc"
+      }
     }
   }
 }
