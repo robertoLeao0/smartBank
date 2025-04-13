@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { useUser } from '../../contexts/user';
 
 const Transfer: React.FC = ({ navigation }: any) => {
+  const { usuarioLogado } = useUser();
   const [valor, setValor] = useState<string>('R$ 0,00');
   const [erro, setErro] = useState<string>(''); // Estado para armazenar a mensagem de erro
 
@@ -28,6 +30,24 @@ const Transfer: React.FC = ({ navigation }: any) => {
 
   // Função que lida com a navegação para a tela de chave (Key)
   const handKey = () => {
+    const valorNumerico = parseInt(valor.replace(/\D/g, ''), 10) / 100;
+    const saldoAtual = usuarioLogado?.saldo ?? 0;
+
+    // Se o saldo do usuário for 0
+    if (saldoAtual <= 0) {
+      Alert.alert('Saldo insuficiente', 'Você não possui saldo para realizar transferências.');
+      setErro('Saldo insuficiente.'); 
+      return;
+    }
+
+    // Se o valor digitado for maior que o saldo
+    if (valorNumerico > saldoAtual) {
+      Alert.alert('Saldo insuficiente', 'O valor excede o seu saldo disponível.');
+      setErro('O valor excede o seu saldo disponível.'); 
+      return;
+    }
+
+    // Se o valor for válido, continua para a tela de chave (Key)
     if (validarValor(valor)) {
       navigation.navigate('Key', { valorTransferencia: valor });
     } else {
@@ -43,7 +63,7 @@ const Transfer: React.FC = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Qual é o valor da transferência?</Text>
-      <Text style={styles.saldo}>Seu saldo disponível: R$ 1.500,00</Text>
+      <Text style={styles.saldo}>Seu saldo disponível: R$ {usuarioLogado?.saldo ?? '0,00'}.</Text>
       <TextInput
         style={styles.input}
         value={valor}
@@ -110,3 +130,4 @@ const styles = StyleSheet.create({
 });
 
 export default Transfer;
+
