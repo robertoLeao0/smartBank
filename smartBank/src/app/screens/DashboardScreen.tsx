@@ -15,7 +15,7 @@ const DashboardScreen: React.FC = ({ navigation }: any) => {
 
   const handleTransfer = () => navigation.navigate('Transferir');
   const handlePayBoleto = () => alert('Função em construção!');
-  const handleHistorico = () => alert('Função em construção!');
+  const handleHistorico = () => navigation.navigate('Historico');
   const handleInvestimentos = () => alert('Função em construção!');
 
   if (!usuarioLogado) {
@@ -44,7 +44,15 @@ const DashboardScreen: React.FC = ({ navigation }: any) => {
           <Text style={styles.balanceLabel}>Seu saldo</Text>
           <Icon name="eye" size={20} color="#fff" />
         </View>
-        <Text style={styles.balanceValue}>R${usuarioLogado.saldo}</Text>
+
+{/* teste de saldo corrigido */}
+        <Text style={styles.balanceValue}>
+          {new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          }).format(usuarioLogado.saldo)}
+        </Text>
+
         <View style={styles.cardInfo}>
           <View style={styles.infoBlock}>
             <Text style={styles.infoLabel}>Número da Conta</Text>
