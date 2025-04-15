@@ -22,7 +22,7 @@ const TransferenciaScreen = () => {
   const { chavePix, valorTransferencia } = route.params;
 
   const handleConfirmacao = () => {
-    navigation.navigate('TransferenciaConcluida');
+    navigation.navigate('Dashboard');
   };
 
   return (
