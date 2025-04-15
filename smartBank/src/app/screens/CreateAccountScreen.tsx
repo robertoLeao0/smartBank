@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, Alert, StyleSheet } from 'react-native';
-import { useUser } from '../../contexts/user'; 
+import {
+  View,
+  TextInput,
+  Text,
+  Alert,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+  TouchableOpacity,
+  Image
+} from 'react-native';
+import { useUser } from '../../contexts/user';
 
 const CreateAccountScreen: React.FC = ({ navigation }: any) => {
   const [nome, setNome] = useState('');
@@ -8,7 +18,6 @@ const CreateAccountScreen: React.FC = ({ navigation }: any) => {
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const { criarConta } = useUser();
-
 
   const handleCreateAccount = () => {
     if (senha !== confirmarSenha) {
@@ -26,46 +35,56 @@ const CreateAccountScreen: React.FC = ({ navigation }: any) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Criação de Conta</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.container}>
+        
+        <Image
+            source={require("../../assets/logo.png")}
+            style={styles.imgLogo}
+        />
 
-   
-      <TextInput
-        placeholder="Digite seu Nome Completo"
-        value={nome}
-        onChangeText={setNome}
-        style={styles.input}
-      />
+        <Text style={styles.title}>Criação de Conta</Text>
 
-     
-      <TextInput
-        placeholder="Digite seu CPF (Ex: 111.222.333-44)"
-        value={cpf}
-        onChangeText={setCpf}
-        keyboardType="numeric"
-        style={styles.input}
-      />
+        <TextInput
+          placeholder="Digite seu Nome Completo"
+          value={nome}
+          onChangeText={setNome}
+          style={styles.input}
+          placeholderTextColor="#8e8e93"
+        />
 
-      
-      <TextInput
-        placeholder="Digite sua Senha"
-        value={senha}
-        onChangeText={setSenha}
-        secureTextEntry
-        style={styles.input}
-      />
+        <TextInput
+          placeholder="Digite seu CPF (Ex: 111.222.333-44)"
+          value={cpf}
+          onChangeText={setCpf}
+          keyboardType="numeric"
+          style={styles.input}
+          placeholderTextColor="#8e8e93"
+        />
 
-   
-      <TextInput
-        placeholder="Confirmar Senha"
-        value={confirmarSenha}
-        onChangeText={setConfirmarSenha}
-        secureTextEntry
-        style={styles.input}
-      />
+        <TextInput
+          placeholder="Digite sua Senha"
+          value={senha}
+          onChangeText={setSenha}
+          secureTextEntry
+          style={styles.input}
+          placeholderTextColor="#8e8e93"
+        />
 
-      <Button title="Criar Conta" onPress={handleCreateAccount} color="#2ecc71" />
-    </View>
+        <TextInput
+          placeholder="Confirmar Senha"
+          value={confirmarSenha}
+          onChangeText={setConfirmarSenha}
+          secureTextEntry
+          style={styles.input}
+          placeholderTextColor="#8e8e93"
+        />
+
+        <TouchableOpacity style={styles.button} onPress={handleCreateAccount}>
+          <Text style={styles.buttonText}>Criar Conta</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -84,13 +103,33 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    width: '100%',
+    width: "100%",
     padding: 10,
     marginBottom: 15,
     borderWidth: 1,
-    borderColor: '#bdc3c7',
+    borderColor: "#bdc3c7",
     borderRadius: 5,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
+    color: "#000",
+  },
+  button: {
+    backgroundColor: "#004080",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  imgLogo: {
+    width: 200,
+    height: 200,
+    marginTop: -200,
+    resizeMode: "contain",
   },
 });
 
