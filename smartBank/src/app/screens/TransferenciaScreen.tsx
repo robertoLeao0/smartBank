@@ -1,50 +1,49 @@
-import React from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, StatusBar } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  StatusBar,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../types/navigation';
 
-// Tipagem dos parâmetros esperados
-type Params = {
-  TransferenciaScreen: {
-    chavePix: string;
-    valorTransferencia: string;
-  };
-};
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'TransferenciaConcluida'>;
 
-type Navigation = {
-  navigate: (screen: string) => void;
-};
-
-const TransferenciaScreen = () => {
-  const navigation = useNavigation<Navigation>();
-  const route = useRoute<RouteProp<Params, 'TransferenciaScreen'>>();
-
-  const { chavePix, valorTransferencia } = route.params;
+const TransferenciaScreen: React.FC = () => {
+  const navigation = useNavigation<NavigationProp>();
+  const [mensagem, setMensagem] = useState<string>('');
 
   const handleConfirmacao = () => {
-    navigation.navigate('Dashboard');
+    navigation.navigate('TransferenciaConcluida');
   };
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
+
       <Text style={styles.titulo}>Transferindo</Text>
-      <Text style={styles.valor}>R$ {valorTransferencia}</Text>
-      <Text style={styles.destinatario}>para a chave PIX:</Text>
-      <Text style={styles.chave}>{chavePix}</Text>
+      <Text style={styles.valor}>R$ 100,00</Text>
+      <Text style={styles.destinatario}>para Mariana Naira Figueiredo</Text>
 
       <View style={styles.mensagemContainer}>
-        <Ionicons name="chatbubble-outline" size={16} color="#555" style={{ marginRight: 6 }} />
+        <Ionicons name="chatbubble-outline" size={16} color="#003366" style={{ marginRight: 6 }} />
         <TextInput
           placeholder="Escreva uma mensagem..."
           placeholderTextColor="#999"
           style={styles.inputMensagem}
+          value={mensagem}
+          onChangeText={setMensagem}
         />
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={styles.infoLabel}>Chave PIX</Text>
-        <Text style={styles.infoValue}>{chavePix}</Text>
+        <Text style={styles.infoLabel}>CPF</Text>
+        <Text style={styles.infoValue}>*.222.543-*</Text>
 
         <Text style={styles.infoLabel}>Instituição</Text>
         <Text style={styles.infoValue}>BANCO INTER LTDA</Text>
@@ -56,8 +55,10 @@ const TransferenciaScreen = () => {
         <Text style={styles.infoValue}>45560-9</Text>
       </View>
 
+      <View style={styles.linhaSeparadora} />
+
       <TouchableOpacity style={styles.botaoConfirmar} onPress={handleConfirmacao}>
-        <Text style={styles.textoBotao}>CONFIRMAR TRANFERÊNCIA</Text>
+        <Text style={styles.textoBotao}>CONFIRMAR TRANSFERÊNCIA</Text>
       </TouchableOpacity>
     </View>
   );
@@ -66,27 +67,24 @@ const TransferenciaScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 24,
+    paddingTop: 60,
     backgroundColor: '#fff',
   },
   titulo: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 10,
+    marginBottom: 4,
+    color: '#000',
   },
   valor: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: 'bold',
-    marginTop: 8,
+    color: '#000',
   },
   destinatario: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#333',
-    marginTop: 16,
-  },
-  chave: {
-    fontSize: 16,
-    color: '#000',
     marginBottom: 24,
   },
   mensagemContainer: {
@@ -94,7 +92,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 12,
     paddingHorizontal: 10,
     paddingVertical: 8,
     marginBottom: 24,
@@ -105,10 +103,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   infoContainer: {
-    borderTopWidth: 1,
-    borderColor: '#999',
-    paddingTop: 16,
-    marginBottom: 32,
+    marginBottom: 16,
   },
   infoLabel: {
     color: '#444',
@@ -116,20 +111,26 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   infoValue: {
-    fontSize: 16,
-    marginBottom: 12,
+    fontSize: 15,
     color: '#000',
+    marginBottom: 12,
+  },
+  linhaSeparadora: {
+    height: 1,
+    backgroundColor: '#E0E0E0',
+    marginVertical: 20,
   },
   botaoConfirmar: {
-    backgroundColor: '#005EA6',
+    backgroundColor: '#003366', // Azul escuro
     paddingVertical: 14,
-    borderRadius: 6,
+    borderRadius: 24,
     alignItems: 'center',
   },
   textoBotao: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 13,
+    letterSpacing: 0.5,
   },
 });
 

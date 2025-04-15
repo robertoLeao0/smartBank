@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRoute, RouteProp } from '@react-navigation/native';
 
 type Params = {
@@ -13,18 +13,15 @@ const Key = ({ navigation }: any) => {
   const { valorTransferencia } = route.params;
 
   const [chavePix, setChavePix] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const validarCPF = (cpf: string): boolean => {
     cpf = cpf.replace(/\D/g, '');
-    if (cpf.length !== 11) return false;
+    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
 
     let soma = 0;
-    let resto;
-
-    if (/^(\d)\1{10}$/.test(cpf)) return false;
-
     for (let i = 1; i <= 9; i++) soma += parseInt(cpf[i - 1]) * (11 - i);
-    resto = (soma * 10) % 11;
+    let resto = (soma * 10) % 11;
     if (resto === 10 || resto === 11) resto = 0;
     if (resto !== parseInt(cpf[9])) return false;
 
@@ -41,39 +38,48 @@ const Key = ({ navigation }: any) => {
   };
 
   const handleContinue = () => {
-    if (validarCPF(chavePix) || validarEmail(chavePix)) {
+    const chaveLimpa = chavePix.replace(/\D/g, '');
+    const isEmail = validarEmail(chavePix);
+    const isCPF = validarCPF(chaveLimpa);
+
+    if (isEmail || isCPF) {
       navigation.navigate('ConfirmPay', {
-        chavePix,
+        chavePix: isEmail ? chavePix : chaveLimpa,
         valorTransferencia,
       });
     } else {
-      Alert.alert('Erro', 'Digite um CPF ou e-mail válido.');
+      setErrorMessage('Por favor, insira um CPF ou e-mail válido.');
     }
   };
 
-  const handTransfer = () => {
+  const handleCancel = () => {
     navigation.navigate('Transferir');
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Para quem você quer transferir {valorTransferencia}?</Text>
-      <Text style={styles.textochave}>Digite a chave PIX abaixo:</Text>
-      <TextInput
-        style={styles.input}
-        value={chavePix}
-        onChangeText={setChavePix}
-        keyboardType="default"
-        placeholder="CPF ou E-mail"
-        placeholderTextColor="#999"
-      />
-      <TouchableOpacity style={styles.button} onPress={handleContinue}>
-        <Text style={styles.buttonText}>Continuar </Text>
-        
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.buttonCancel} onPress={handTransfer}>
-        <Text style={styles.buttonText}>Cancelar</Text>
-      </TouchableOpacity>
+      <View>
+        <Text style={styles.title}>Para quem você quer transferir {valorTransferencia}?</Text>
+        <Text style={styles.label}>Digite a chave PIX:</Text>
+        <TextInput
+          style={styles.input}
+          value={chavePix}
+          onChangeText={setChavePix}
+          keyboardType="default"
+          placeholder="CPF ou E-mail"
+          placeholderTextColor="#999"
+        />
+        {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+      </View>
+
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity style={styles.button} onPress={handleContinue}>
+          <Text style={styles.buttonText}>Continuar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleCancel}>
+          <Text style={styles.buttonText}>Cancelar</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -81,50 +87,52 @@ const Key = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
-    paddingTop: 80,
-    paddingHorizontal: 20,
-    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 24,
+    paddingTop: 40,
+    paddingBottom: 30,
+    justifyContent: 'space-between',
   },
   title: {
-    fontSize: 20,
-    color: '#000',
-    fontWeight: '600',
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000000',
     marginBottom: 8,
   },
-  textochave: {
+  label: {
     fontSize: 16,
-    color: '#333',
+    color: '#444444',
     marginBottom: 30,
   },
   input: {
-    fontSize: 16,
+    fontSize: 30,
     borderBottomWidth: 1,
-    borderBottomColor: '#999',
-    width: '80%',
-    paddingVertical: 8,
+    borderBottomColor: '#000000',
+    paddingVertical: 6,
+    color: '#000000',
+    width: '70%',
+    textAlign: 'left',
+    marginBottom: 20,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    marginBottom: 20,
     textAlign: 'center',
-    marginBottom: 40,
+  },
+  buttonsContainer: {
+    alignItems: 'center',
+    gap: 10,
   },
   button: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#0000FF',
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 25,
-    marginBottom: 15,
-    width: '80%',
-    alignItems: 'center',
-  },
-  buttonCancel: {
-    backgroundColor: '#f44336',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 25,
-    width: '80%',
-    alignItems: 'center',
+    alignSelf: 'center',
   },
   buttonText: {
-    color: '#FFF',
+    color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
   },
