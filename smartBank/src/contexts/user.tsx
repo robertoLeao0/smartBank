@@ -73,7 +73,7 @@ function UserProvider({ children }: UserProviderProps) {
       chavePix,
       numeroCartao,
       dataExpiracaoCartao,
-      saldo: 0,
+      saldo: 1000,
     };
 
     setUsuarios([...usuarios, novoUsuario]);
