@@ -11,37 +11,11 @@ import {
   Keyboard,
 } from "react-native";
 import { useUser } from "../../contexts/user";
-import * as LocalAuthentication from "expo-local-authentication"; // Importando o LocalAuthentication
 
 const LoginScreen: React.FC = ({ navigation }: any) => {
   const [cpf, setCpf] = useState("");
   const [senha, setSenha] = useState("");
   const { login } = useUser();
-
-  // Função para autenticar usando o Face ID ou outro método biométrico
-  const handleFaceIDLogin = async () => {
-    try {
-      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-
-      if (isEnrolled) {
-        const result = await LocalAuthentication.authenticateAsync({
-          promptMessage: "Autentique-se com sua biometria",
-          fallbackLabel: "Usar senha",
-        });
-
-        if (result.success) {
-          Alert.alert("Sucesso", "Autenticação bem-sucedida!");
-          navigation.navigate("Dashboard");
-        } else {
-          Alert.alert("Erro", "Falha na autenticação biométrica.");
-        }
-      } else {
-        Alert.alert("Erro", "Seu dispositivo não tem biometria cadastrada.");
-      }
-    } catch (error) {
-      Alert.alert("Erro", "Houve um erro ao tentar autenticar com biometria.");
-    }
-  };
 
   const handleLogin = () => {
     const usuario = login(cpf, senha);
@@ -68,7 +42,7 @@ const LoginScreen: React.FC = ({ navigation }: any) => {
           onChangeText={setCpf}
           keyboardType="numeric"
           style={styles.input}
-           placeholderTextColor="#8e8e93"
+          placeholderTextColor="#8e8e93"
         />
 
         <TextInput
@@ -77,19 +51,11 @@ const LoginScreen: React.FC = ({ navigation }: any) => {
           onChangeText={setSenha}
           secureTextEntry
           style={styles.input}
-           placeholderTextColor="#8e8e93"
+          placeholderTextColor="#8e8e93"
         />
 
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <Text style={styles.loginButtonText}>Entrar na minha conta</Text>
-        </TouchableOpacity>
-
-        {/* Botão para autenticação biométrica */}
-        <TouchableOpacity
-          style={styles.biometricButton}
-          onPress={handleFaceIDLogin}
-        >
-          <Text style={styles.biometricButtonText}>Entrar com Face ID</Text>
         </TouchableOpacity>
 
         <View style={styles.registerContainer}>
@@ -123,7 +89,7 @@ const styles = StyleSheet.create({
     borderColor: "#bdc3c7",
     borderRadius: 5,
     backgroundColor: "#fff",
-    color: "#000"
+    color: "#000",
   },
   loginButton: {
     backgroundColor: "#004080",
@@ -135,20 +101,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   loginButtonText: {
-    color: "white",
-    fontSize: 16,
-  },
-  biometricButton: {
-    backgroundColor: "#2ecc71",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-  },
-  biometricButtonText: {
     color: "white",
     fontSize: 16,
   },
