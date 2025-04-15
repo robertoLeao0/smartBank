@@ -42,7 +42,7 @@ const Key = ({ navigation }: any) => {
 
   const handleContinue = () => {
     if (validarCPF(chavePix) || validarEmail(chavePix)) {
-      navigation.navigate('TransferenciaScreen', {
+      navigation.navigate('ConfirmPay', {
         chavePix,
         valorTransferencia,
       });
@@ -68,7 +68,8 @@ const Key = ({ navigation }: any) => {
         placeholderTextColor="#999"
       />
       <TouchableOpacity style={styles.button} onPress={handleContinue}>
-        <Text style={styles.buttonText}>Continuar</Text>
+        <Text style={styles.buttonText}>Continuar </Text>
+        
       </TouchableOpacity>
       <TouchableOpacity style={styles.buttonCancel} onPress={handTransfer}>
         <Text style={styles.buttonText}>Cancelar</Text>

@@ -7,6 +7,7 @@ import UserProvider from '../contexts/user';
 import Transfer from './screens/Transfer';
 import historicoPagamentos from './screens/historicpay';
 import Key from './screens/Key'
+import ConfirmPay from './screens/TransferenciaScreen'
 const Stack = createStackNavigator();
 
 const App: React.FC = () => {
@@ -19,6 +20,7 @@ const App: React.FC = () => {
           <Stack.Screen name="Transferir" component={Transfer} />
           <Stack.Screen name="Historico" component={historicoPagamentos} />
           <Stack.Screen name="Key" component={Key} />
+          <Stack.Screen name="ConfirmPay" component={ConfirmPay} />
         </Stack.Navigator>
       </UserProvider>
   );
