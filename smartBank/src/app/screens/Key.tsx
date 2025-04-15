@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { useRoute } from '@react-navigation/native';
-const Key: React.FC = ({ navigation }: any) => {
-  const [chavePix, setChavePix] = useState<string>('');
-  const route = useRoute();
+import { useRoute, RouteProp } from '@react-navigation/native';
+
+type Params = {
+  Key: {
+    valorTransferencia: string;
+  };
+};
+
+const Key = ({ navigation }: any) => {
+  const route = useRoute<RouteProp<Params, 'Key'>>();
   const { valorTransferencia } = route.params;
+
+  const [chavePix, setChavePix] = useState<string>('');
 
   const validarCPF = (cpf: string): boolean => {
     cpf = cpf.replace(/\D/g, '');
@@ -12,8 +20,8 @@ const Key: React.FC = ({ navigation }: any) => {
 
     let soma = 0;
     let resto;
-    
-    if (/^(\d)\1{10}$/.test(cpf)) return false; // Impede CPFs como 111.111.111-11
+
+    if (/^(\d)\1{10}$/.test(cpf)) return false;
 
     for (let i = 1; i <= 9; i++) soma += parseInt(cpf[i - 1]) * (11 - i);
     resto = (soma * 10) % 11;
@@ -24,7 +32,6 @@ const Key: React.FC = ({ navigation }: any) => {
     for (let i = 1; i <= 10; i++) soma += parseInt(cpf[i - 1]) * (12 - i);
     resto = (soma * 10) % 11;
     if (resto === 10 || resto === 11) resto = 0;
-    
     return resto === parseInt(cpf[10]);
   };
 
@@ -35,15 +42,18 @@ const Key: React.FC = ({ navigation }: any) => {
 
   const handleContinue = () => {
     if (validarCPF(chavePix) || validarEmail(chavePix)) {
-      console.log('Chave válida! Prosseguindo...');
-      // Aqui você pode navegar para a próxima tela
+      navigation.navigate('TransferenciaScreen', {
+        chavePix,
+        valorTransferencia,
+      });
     } else {
       Alert.alert('Erro', 'Digite um CPF ou e-mail válido.');
     }
   };
+
   const handTransfer = () => {
     navigation.navigate('Transferir');
-};
+  };
 
   return (
     <View style={styles.container}>
@@ -54,13 +64,13 @@ const Key: React.FC = ({ navigation }: any) => {
         value={chavePix}
         onChangeText={setChavePix}
         keyboardType="default"
-        placeholder="CPF, e-mail ou chave aleatória"
+        placeholder="CPF ou E-mail"
         placeholderTextColor="#999"
       />
       <TouchableOpacity style={styles.button} onPress={handleContinue}>
         <Text style={styles.buttonText}>Continuar</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handTransfer}>
+      <TouchableOpacity style={styles.buttonCancel} onPress={handTransfer}>
         <Text style={styles.buttonText}>Cancelar</Text>
       </TouchableOpacity>
     </View>
@@ -71,38 +81,46 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
     paddingTop: 80,
-    padding: 20,
+    paddingHorizontal: 20,
+    alignItems: 'center',
   },
   title: {
-    fontSize: 22,
-    color: '#000000',
-    textAlign: 'center',
-    marginBottom: 10,
+    fontSize: 20,
+    color: '#000',
+    fontWeight: '600',
+    marginBottom: 8,
   },
   textochave: {
     fontSize: 16,
-    color: '#000000',
-    marginBottom: 20,
+    color: '#333',
+    marginBottom: 30,
   },
   input: {
-    fontSize: 18,
-    color: '#000000',
+    fontSize: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#999',
+    width: '80%',
+    paddingVertical: 8,
     textAlign: 'center',
-    borderBottomWidth: 2,
-    borderBottomColor: '#000000',
-    width: '50%',
-    marginBottom: 30,
-    padding: 10,
+    marginBottom: 40,
   },
   button: {
-    backgroundColor: '#0000FF',
+    backgroundColor: '#4CAF50',
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 25,
     marginBottom: 15,
+    width: '80%',
+    alignItems: 'center',
+  },
+  buttonCancel: {
+    backgroundColor: '#f44336',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 25,
+    width: '80%',
+    alignItems: 'center',
   },
   buttonText: {
     color: '#FFF',
